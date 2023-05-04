@@ -3,13 +3,14 @@ import {
   ADD_SERVICE,
   REMOVE_SERVICE,
   CHANGE_SERVICE,
+  CHANGE_ID_TO_EDIT,
 } from "../actions/actionTypes";
 const initialState = {
   servicesList: [
     { id: nanoid(), name: "Замена стекла", price: 21000 },
     { id: nanoid(), name: "Замена дисплея", price: 25000 },
   ],
-  formType: "create",
+  idToEdit: null,
 };
 
 const serviceReducer = (state = initialState, action) => {
@@ -28,18 +29,26 @@ const serviceReducer = (state = initialState, action) => {
       const { id } = action.payload;
       return {
         ...state,
+        idToEdit: null,
         servicesList: state.servicesList.filter((service) => service.id !== id),
       };
     }
-    case CHANGE_SERVICE: {
-      const { id, name, price } = action.payload;
+    case CHANGE_ID_TO_EDIT: {
+      const { id } = action.payload;
       return {
         ...state,
+        idToEdit: id,
+      };
+    }
+    case CHANGE_SERVICE: {
+      const { id } = action.payload;
+      return {
+        ...state,
+        idToEdit: null,
         servicesList: state.servicesList.map((service) => {
           return service.id === id
             ? {
-                name,
-                price,
+                ...action.payload,
               }
             : service;
         }),

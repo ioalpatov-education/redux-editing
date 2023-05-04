@@ -2,7 +2,11 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Button } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
-import { addService } from "../actions/actionCreators";
+import {
+  addService,
+  changeService,
+  changeIdToEdit,
+} from "../actions/actionCreators";
 
 const ServiceFormSchema = Yup.object({
   name: Yup.string().required("Обязательное поле"),
@@ -12,28 +16,31 @@ const ServiceFormSchema = Yup.object({
 });
 
 const ServiceForm = () => {
+  const service = useSelector((state) => state.service);
+  const { idToEdit, servicesList } = service;
+
+  const serviceToEdit = servicesList.find((service) => service.id === idToEdit);
+
   const initialValues = {
-    name: "",
-    price: "",
+    name: !idToEdit ? "" : serviceToEdit.name,
+    price: !idToEdit ? "" : serviceToEdit.price,
   };
 
-  const formType = useSelector((state) => state.service.formType);
   const dispatch = useDispatch();
 
   const handleSubmit = (values, actions) => {
     const { name, price } = values;
-    switch (formType) {
-      case "create": {
-        dispatch(addService(name, price));
-        break;
-      }
-
-      default: {
-        break;
-      }
+    if (!idToEdit) {
+      dispatch(addService(name, price));
+    } else {
+      dispatch(changeService(idToEdit, name, price));
     }
 
     actions.resetForm();
+  };
+
+  const resetForm = () => {
+    dispatch(changeIdToEdit(null));
   };
 
   return (
@@ -75,12 +82,13 @@ const ServiceForm = () => {
           Save
         </Button>
 
-        {formType === "edit" ? (
+        {!!idToEdit ? (
           <Button
+            onClick={resetForm}
             className="form__btn"
             variant="outlined"
             color="info"
-            type="submit"
+            type="click"
           >
             Cancel
           </Button>

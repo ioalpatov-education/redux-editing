@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { IconButton } from "@mui/material";
 import { Edit, Clear } from "@mui/icons-material";
-import { removeService } from "../actions/actionCreators";
+import { removeService, changeIdToEdit } from "../actions/actionCreators";
 
 const ServiceList = () => {
   const serviceList = useSelector((state) => state.service.servicesList);
@@ -10,6 +10,10 @@ const ServiceList = () => {
 
   const removeItem = (e, id) => {
     dispatch(removeService(id));
+  };
+
+  const editItem = (e, id) => {
+    dispatch(changeIdToEdit(id));
   };
 
   return (
@@ -22,7 +26,7 @@ const ServiceList = () => {
               <li className="service-item" key={id}>
                 <span>{name}</span>
                 <span>{price}</span>
-                <IconButton aria-label="edit">
+                <IconButton onClick={(e) => editItem(e, id)} aria-label="edit">
                   <Edit />
                 </IconButton>
                 <IconButton
