@@ -4,6 +4,7 @@ import {
   REMOVE_SERVICE,
   CHANGE_SERVICE,
   CHANGE_ID_TO_EDIT,
+  CHANGE_FILTER,
 } from "../actions/actionTypes";
 const initialState = {
   servicesList: [
@@ -11,6 +12,7 @@ const initialState = {
     { id: nanoid(), name: "Замена дисплея", price: 25000 },
   ],
   idToEdit: null,
+  filter: "",
 };
 
 const serviceReducer = (state = initialState, action) => {
@@ -52,6 +54,13 @@ const serviceReducer = (state = initialState, action) => {
               }
             : service;
         }),
+      };
+    }
+    case CHANGE_FILTER: {
+      const { filter } = action.payload;
+      return {
+        ...state,
+        filter,
       };
     }
     default: {

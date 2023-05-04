@@ -3,6 +3,7 @@ import {
   REMOVE_SERVICE,
   CHANGE_SERVICE,
   CHANGE_ID_TO_EDIT,
+  CHANGE_FILTER,
 } from "./actionTypes";
 export const addService = (name, price) => {
   return { type: ADD_SERVICE, payload: { name, price } };
@@ -15,4 +16,7 @@ export const changeService = (id, name, price) => {
 };
 export const changeIdToEdit = (id) => {
   return { type: CHANGE_ID_TO_EDIT, payload: { id } };
+};
+export const changeFilter = (filter) => {
+  return { type: CHANGE_FILTER, payload: { filter } };
 };

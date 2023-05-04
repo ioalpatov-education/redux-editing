@@ -4,7 +4,15 @@ import { Edit, Clear } from "@mui/icons-material";
 import { removeService, changeIdToEdit } from "../actions/actionCreators";
 
 const ServiceList = () => {
-  const serviceList = useSelector((state) => state.service.servicesList);
+  const service = useSelector((state) => state.service);
+
+  const { servicesList, filter } = service;
+
+  const filteredServicesList = servicesList.filter((service) => {
+    return !filter
+      ? true
+      : service.name.toLowerCase().includes(filter.toLowerCase());
+  });
 
   const dispatch = useDispatch();
 
@@ -18,9 +26,9 @@ const ServiceList = () => {
 
   return (
     <>
-      {!!serviceList.length ? (
+      {!!servicesList.length ? (
         <ul>
-          {serviceList.map((item) => {
+          {filteredServicesList.map((item) => {
             const { id, name, price } = item;
             return (
               <li className="service-item" key={id}>
